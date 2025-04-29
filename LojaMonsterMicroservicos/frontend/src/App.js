@@ -1,53 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import ProdutoList from './components/ProdutoList';
-import PedidoForm from './components/PedidoForm';
-import PedidoList from './components/PedidoList';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import Produtos from './components/Produtos';
+import NovoPedido from './components/NovoPedido';
+import Pedidos from './components/Pedidos';
 
 function App() {
-  const [produtos, setProdutos] = useState([]);
-  const [pedidos, setPedidos] = useState([]);
-
-  useEffect(() => {
-    fetchProdutos();
-    fetchPedidos();
-  }, []);
-
-  const fetchProdutos = async () => {
-    try {
-      const res = await axios.get('http://localhost:3001/produtos');
-      setProdutos(res.data);
-    } catch (error) {
-      alert('Erro ao carregar produtos.');
-    }
-  };
-
-  const fetchPedidos = async () => {
-    try {
-      const res = await axios.get('http://localhost:3002/pedidos');
-      setPedidos(res.data);
-    } catch (error) {
-      alert('Erro ao carregar pedidos.');
-    }
-  };
-
-  const criarPedido = async (pedido) => {
-    try {
-      await axios.post('http://localhost:3002/pedidos', pedido);
-      alert('Pedido criado com sucesso!');
-      fetchPedidos();
-    } catch (error) {
-      alert('Erro ao criar pedido.');
-    }
-  };
-
   return (
-    <div style={{ padding: '2rem' }}>
-      <h1>Loja Monster</h1>
-      <ProdutoList produtos={produtos} />
-      <PedidoForm produtos={produtos} onCriarPedido={criarPedido} />
-      <PedidoList pedidos={pedidos} />
-    </div>
+    <Router>
+      <div style={{ padding: '1rem' }}>
+        <nav>
+          <Link to="/produtos">Produtos</Link> | <Link to="/novo-pedido">Novo Pedido</Link> | <Link to="/pedidos">Pedidos</Link>
+        </nav>
+        <Routes>
+          <Route path="/produtos" element={<Produtos />} />
+          <Route path="/novo-pedido" element={<NovoPedido />} />
+          <Route path="/pedidos" element={<Pedidos />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 

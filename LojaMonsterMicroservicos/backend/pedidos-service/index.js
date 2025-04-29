@@ -14,19 +14,19 @@ app.get('/pedidos', (req, res) => {
 });
 
 app.post('/pedidos', (req, res) => {
-  const { nomeProduto, quantidade } = req.body;
-  if (!nomeProduto || quantidade <= 0) {
-    return res.status(400).json({ mensagem: 'Dados inválidos' });
+  const { itens } = req.body;
+  if (!itens || !Array.isArray(itens) || itens.length === 0) {
+    return res.status(400).json({ mensagem: 'Itens do pedido inválidos.' });
   }
   const novoPedido = {
     id: uuidv4(),
-    nomeProduto,
-    quantidade,
+    itens,
     data: new Date().toISOString()
   };
   pedidos.push(novoPedido);
   res.status(201).json(novoPedido);
 });
+
 
 app.listen(PORT, () => {
   console.log(`Pedidos service rodando na porta ${PORT}`);

@@ -18,6 +18,20 @@ app.get('/produtos', (req, res) => {
   res.json(produtos);
 });
 
+app.post('/produtos', (req, res) => {
+  const { nome, preco } = req.body;
+  if (!nome || preco <= 0) {
+    return res.status(400).json({ mensagem: 'Nome e preço válidos são obrigatórios' });
+  }
+  const novoProduto = {
+    id: produtos.length + 1,
+    nome,
+    preco
+  };
+  produtos.push(novoProduto);
+  res.status(201).json(novoProduto);
+});
+
 app.listen(PORT, () => {
   console.log(`Produtos service rodando na porta ${PORT}`);
 });
