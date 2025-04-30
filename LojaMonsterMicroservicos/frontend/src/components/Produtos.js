@@ -37,19 +37,32 @@ function Produtos() {
   };
 
   return (
-    <div>
-      <h2>Cadastro de Produtos</h2>
-      <form onSubmit={handleSubmit}>
-        <input value={nome} onChange={e => setNome(e.target.value)} placeholder="Nome" />
-        <input type="number" value={preco} onChange={e => setPreco(e.target.value)} placeholder="Preço" />
-        <button type="submit">Cadastrar</button>
+    <div className="container text-center">
+      <h2 className="mb-4">Cadastro de Produtos</h2>
+      <form onSubmit={handleSubmit} className="mb-4">
+        <div className="row justify-content-center">
+          <div className="col-md-4">
+            <input className="form-control mb-2" value={nome} onChange={e => setNome(e.target.value)} placeholder="Nome do produto" />
+          </div>
+          <div className="col-md-2">
+            <input className="form-control mb-2" type="number" value={preco} onChange={e => setPreco(e.target.value)} placeholder="Preço" />
+          </div>
+          <div className="col-md-2">
+            <button className="btn btn-monster w-100" type="submit">Cadastrar</button>
+          </div>
+        </div>
       </form>
-      <h3>Lista de Produtos</h3>
-      <ul>
+      <h3 className="mb-3">Lista de Produtos</h3>
+      <div className="row">
         {produtos.map(prod => (
-          <li key={prod.id}>{prod.nome} - R$ {prod.preco.toFixed(2)}</li>
+          <div key={prod.id} className="col-md-4 mb-3">
+            <div className="card p-3 text-light">
+              <h5>{prod.nome}</h5>
+              <p>R$ {prod.preco.toFixed(2)}</p>
+            </div>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }
