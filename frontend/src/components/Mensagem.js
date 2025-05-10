@@ -2,6 +2,7 @@ import React from 'react';
 
 function Mensagem({ tipo, mensagem }) {
   if (!mensagem) return null;
+
   return (
     <div style={{
       padding: '10px',

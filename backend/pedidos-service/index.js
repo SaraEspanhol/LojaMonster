@@ -1,33 +1,38 @@
 const express = require('express');
 const cors = require('cors');
-const { v4: uuidv4 } = require('uuid');
 const app = express();
-const PORT = 3002;
 
 app.use(cors());
 app.use(express.json());
 
 let pedidos = [];
+let proximoId = 1;
 
+// Rota para criar novo pedido
+app.post('/pedidos', (req, res) => {
+  const { cliente, produtos } = req.body;
+
+  if (!produtos || !Array.isArray(produtos) || produtos.length === 0) {
+    return res.status(400).json({ erro: 'Lista de produtos inválida' });
+  }
+
+  const pedido = {
+    id: proximoId++,
+    cliente: cliente || 'Consumidor',
+    produtos,
+    data: new Date().toISOString(), // ISO 8601 para ser compatível com `new Date(...)`
+  };
+
+  pedidos.push(pedido);
+  res.status(201).json(pedido);
+});
+
+// Rota para listar todos os pedidos
 app.get('/pedidos', (req, res) => {
   res.json(pedidos);
 });
 
-app.post('/pedidos', (req, res) => {
-  const { itens } = req.body;
-  if (!itens || !Array.isArray(itens) || itens.length === 0) {
-    return res.status(400).json({ mensagem: 'Itens do pedido inválidos.' });
-  }
-  const novoPedido = {
-    id: uuidv4(),
-    itens,
-    data: new Date().toISOString()
-  };
-  pedidos.push(novoPedido);
-  res.status(201).json(novoPedido);
-});
-
-
+const PORT = 3002;
 app.listen(PORT, () => {
-  console.log(`Pedidos service rodando na porta ${PORT}`);
+  console.log(`🛒 Pedido-Service rodando na porta ${PORT}`);
 });

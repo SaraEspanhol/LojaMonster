@@ -12,8 +12,12 @@ function NovoPedido({ ativarAnimacao }) {
   }, []);
 
   const carregarProdutos = async () => {
-    const res = await axios.get('http://localhost:3001/produtos');
-    setProdutos(res.data);
+    try {
+      const res = await axios.get('http://localhost:3001/produtos');
+      setProdutos(res.data);
+    } catch (err) {
+      console.error('Erro ao carregar produtos:', err);
+    }
   };
 
   const adicionarItem = () => {
@@ -22,7 +26,15 @@ function NovoPedido({ ativarAnimacao }) {
       alert('Produto ou quantidade inválida');
       return;
     }
-    setItens([...itens, { nomeProduto: produto.nome, quantidade }]);
+
+    const item = {
+      id: produto.id,
+      nome: produto.nome,
+      preco: produto.preco,
+      quantidade
+    };
+
+    setItens([...itens, item]);
     setProdutoId('');
     setQuantidade(1);
   };
@@ -32,18 +44,23 @@ function NovoPedido({ ativarAnimacao }) {
       alert('Adicione ao menos um produto');
       return;
     }
+
     try {
-      await axios.post('http://localhost:3002/pedidos', { itens });
+      await axios.post('http://localhost:3002/pedidos', {
+        cliente: 'Consumidor', // fixo por enquanto
+        produtos: itens
+      });
+
       setItens([]);
       if (ativarAnimacao) ativarAnimacao();
     } catch (err) {
+      console.error('Erro ao criar pedido:', err);
       alert('Erro ao criar pedido');
     }
   };
 
-  // ✅ FUNÇÃO DE TOCAR SOM FORA DO JSX
   const tocarSom = () => {
-    const audio = new Audio('/sounds/clique.wav'); // Caminho relativo à pasta 'public'
+    const audio = new Audio('/sounds/clique.wav');
     audio.play().catch(err => console.warn("Erro ao tocar som:", err));
   };
 
@@ -60,19 +77,27 @@ function NovoPedido({ ativarAnimacao }) {
           </select>
         </div>
         <div className="col-md-2">
-          <input type="number" min="1" className="form-control" value={quantidade} onChange={e => setQuantidade(Number(e.target.value))} />
+          <input
+            type="number"
+            min="1"
+            className="form-control"
+            value={quantidade}
+            onChange={e => setQuantidade(Number(e.target.value))}
+          />
         </div>
         <div className="col-md-3">
           <button className="btn btn-monster w-100" onClick={adicionarItem}>Adicionar</button>
         </div>
       </div>
+
       <ul className="list-group mb-3">
         {itens.map((item, index) => (
           <li key={index} className="list-group-item bg-dark text-light">
-            {item.nomeProduto} - {item.quantidade}
+            {item.nome} - {item.quantidade}
           </li>
         ))}
       </ul>
+
       <button className="btn btn-monster" onClick={() => {
         tocarSom();
         fecharPedido();
