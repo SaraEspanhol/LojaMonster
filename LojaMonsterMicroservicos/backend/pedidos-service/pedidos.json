@@ -1,0 +1,28 @@
+[
+  {
+    "id": 1,
+    "cliente": "Consumidor",
+    "produtos": [
+      {
+        "id": "54025d27",
+        "nome": "Sara",
+        "preco": 123,
+        "quantidade": 1
+      }
+    ],
+    "data": "2025-05-10T19:54:35.951Z"
+  },
+  {
+    "id": 2,
+    "cliente": "Consumidor",
+    "produtos": [
+      {
+        "id": "cc230e21",
+        "nome": "Ester",
+        "preco": 145,
+        "quantidade": 1
+      }
+    ],
+    "data": "2025-05-10T20:08:11.028Z"
+  }
+]

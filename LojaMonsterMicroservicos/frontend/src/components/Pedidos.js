@@ -14,6 +14,7 @@ function Pedidos() {
       setPedidos(res.data);
     } catch (err) {
       alert('Erro ao carregar pedidos');
+      console.error(err);
     }
   };
 
@@ -23,11 +24,22 @@ function Pedidos() {
       {pedidos.map(pedido => (
         <div key={pedido.id} className="card mb-4 p-3 text-light bg-dark">
           <h5>Pedido ID: {pedido.id}</h5>
-          <p>Data: {new Date(pedido.data).toLocaleString()}</p>
+          <p>
+            Data:{' '}
+            {pedido.data
+              ? new Date(pedido.data).toLocaleString('pt-BR', {
+                  day: '2-digit',
+                  month: '2-digit',
+                  year: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })
+              : 'Data indisponível'}
+          </p>
           <ul className="list-group">
-            {pedido.itens.map((item, index) => (
+            {pedido.produtos.map((item, index) => (
               <li key={index} className="list-group-item bg-secondary text-light">
-                {item.nomeProduto} - Quantidade: {item.quantidade}
+                {item.nome} - Quantidade: {item.quantidade}
               </li>
             ))}
           </ul>

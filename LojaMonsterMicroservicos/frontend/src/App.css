@@ -86,4 +86,22 @@ body {
       opacity: 1;
     }
   }
+  .btn-monster {
+    background-color: #00ff00;
+    color: black;
+    font-weight: bold;
+    border: none;
+    transition: 0.3s;
+  }
+  
+  .btn-monster:hover {
+    background-color: #ccff00;
+    color: black;
+  }
+  
+  .formulario-produto {
+    max-width: 400px;
+    margin: auto;
+  }
+  
   

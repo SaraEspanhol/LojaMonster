@@ -1,37 +1,46 @@
 const express = require('express');
 const cors = require('cors');
+const bodyParser = require('body-parser');
+const { randomBytes } = require('crypto');
+const axios = require('axios');
+
 const app = express();
-const PORT = 3001;
-
 app.use(cors());
-app.use(express.json());
+app.use(bodyParser.json());
 
-let produtos = [
-  { id: 1, nome: 'Monster Energy Original', preco: 10.0 },
-  { id: 2, nome: 'Monster Ultra White', preco: 12.0 },
-  { id: 3, nome: 'Monster Mango Loco', preco: 13.0 },
-  { id: 4, nome: 'Monster Pipeline Punch', preco: 14.0 },
-  { id: 5, nome: 'Monster Zero Ultra', preco: 11.0 }
-];
+const produtos = [];
 
 app.get('/produtos', (req, res) => {
-  res.json(produtos);
+  res.send(produtos);
 });
 
-app.post('/produtos', (req, res) => {
-  const { nome, preco } = req.body;
-  if (!nome || preco <= 0) {
-    return res.status(400).json({ mensagem: 'Nome e preço válidos são obrigatórios' });
-  }
-  const novoProduto = {
-    id: produtos.length + 1,
-    nome,
-    preco
-  };
+app.post('/produtos', async (req, res) => {
+  const { nome, preco, imagem } = req.body;
+  const id = randomBytes(4).toString('hex');
+
+  const novoProduto = { id, nome, preco, imagem };
   produtos.push(novoProduto);
-  res.status(201).json(novoProduto);
+
+  // Enviar evento para o Event Bus
+  try {
+    await axios.post('http://localhost:4005/events', {
+      type: 'ProdutoCriado',
+      data: novoProduto
+    });
+    console.log('[ProdutoService] Evento ProdutoCriado enviado');
+  } catch (err) {
+    console.error('[ProdutoService] Erro ao enviar evento:', err.message);
+  }
+
+  res.status(201).send(novoProduto);
 });
 
-app.listen(PORT, () => {
-  console.log(`Produtos service rodando na porta ${PORT}`);
+app.post('/events', (req, res) => {
+  const event = req.body;
+  console.log('[ProdutoService] Evento recebido:', event.type);
+  res.send({ status: 'ok' });
+});
+
+app.listen(3001, () => {
+  console.log('Produto Service rodando na porta 3001');
 });

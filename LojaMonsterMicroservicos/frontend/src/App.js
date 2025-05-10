@@ -1,26 +1,32 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+// Importa os componentes de roteamento do React Router
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+
+
+// Importa os componentes usados nas rotas
 import Produtos from './components/Produtos';
-import NovoPedido from './components/NovoPedido';
+import NovoProduto from './components/NovoProduto';
 import Pedidos from './components/Pedidos';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import NovoPedido from './components/NovoPedido';
+import Home from './components/Home';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer'; 
 
 function App() {
   return (
+    // Define que toda a aplicação usará rotas do tipo BrowserRouter
     <Router>
-      <div className="container py-3">
-        <img className="gif-banner" src="https://media.giphy.com/media/3o6Zt481isNVuQI1l6/giphy.gif" alt="Monster Energy" />
-        <nav className="mb-4">
-          <Link className="btn btn-outline-light me-2" to="/produtos">Produtos</Link>
-          <Link className="btn btn-outline-light me-2" to="/novo-pedido">Novo Pedido</Link>
-          <Link className="btn btn-outline-light" to="/pedidos">Pedidos</Link>
-        </nav>
-        <Routes>
-          <Route path="/produtos" element={<Produtos />} />
-          <Route path="/novo-pedido" element={<NovoPedido />} />
-          <Route path="/pedidos" element={<Pedidos />} />
-        </Routes>
-      </div>
+      <Navbar /> {/* Exibe a barra de navegação no topo */}
+      <Routes>
+        {/* Redireciona da raiz para /produtos */}
+        <Route path="/" element={<Navigate to="/produtos" replace />} />
+        <Route path="/novo-produto" element={<NovoProduto />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/produtos" element={<Produtos />} />
+        <Route path="/pedidos" element={<Pedidos />} />
+        <Route path="/novo-pedido" element={<NovoPedido />} />
+      </Routes>
+      <Footer /> {/* Exibe o rodapé em todas as páginas */}
     </Router>
   );
 }
