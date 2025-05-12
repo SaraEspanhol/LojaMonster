@@ -8,12 +8,14 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-const produtos = [];
+const produtos = []; // Array em memória
 
+// Lista todos os produtos
 app.get('/produtos', (req, res) => {
   res.send(produtos);
 });
 
+// Cria um novo produto
 app.post('/produtos', async (req, res) => {
   const { nome, preco, imagem } = req.body;
   const id = randomBytes(4).toString('hex');
@@ -21,7 +23,7 @@ app.post('/produtos', async (req, res) => {
   const novoProduto = { id, nome, preco, imagem };
   produtos.push(novoProduto);
 
-  // Enviar evento para o Event Bus
+  // Emite evento ProdutoCriado para o Event Bus
   try {
     await axios.post('http://localhost:4005/events', {
       type: 'ProdutoCriado',
@@ -35,12 +37,14 @@ app.post('/produtos', async (req, res) => {
   res.status(201).send(novoProduto);
 });
 
+// Recebe eventos do Event Bus (não utilizado ainda)
 app.post('/events', (req, res) => {
   const event = req.body;
   console.log('[ProdutoService] Evento recebido:', event.type);
   res.send({ status: 'ok' });
 });
 
+// Inicia o serviço
 app.listen(3001, () => {
-  console.log('Produto Service rodando na porta 3001');
+  console.log('📦 Produto Service rodando na porta 3001');
 });

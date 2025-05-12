@@ -23,8 +23,9 @@ const NovoProduto = ({ onProdutoCadastrado }) => {
     axios.post('http://localhost:3001/produtos', novoProduto)
       .then((res) => {
         if (typeof onProdutoCadastrado === 'function') {
-          onProdutoCadastrado(); // Só chama se for função
+          onProdutoCadastrado();
         }
+        
         alert('Produto cadastrado com sucesso!');
         setNome('');
         setPreco('');

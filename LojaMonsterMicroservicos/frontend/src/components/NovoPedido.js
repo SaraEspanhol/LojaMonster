@@ -15,31 +15,36 @@ function NovoPedido({ ativarAnimacao }) {
     try {
       const res = await axios.get('http://localhost:3001/produtos');
       setProdutos(res.data);
+      localStorage.setItem('produtosCache', JSON.stringify(res.data));
     } catch (err) {
-      console.error('Erro ao carregar produtos:', err);
+      console.warn('⚠️ Falha ao buscar produtos. Usando cache.');
+      const cache = localStorage.getItem('produtosCache');
+      if (cache) {
+        setProdutos(JSON.parse(cache));
+      } else {
+        alert('Não foi possível carregar produtos. Verifique a conexão com o servidor.');
+      }
     }
   };
 
   const adicionarItem = () => {
     const produto = produtos.find(p => p.id === produtoId);
-  
     if (!produto || quantidade <= 0) {
       alert('Produto ou quantidade inválida');
       return;
     }
-  
+
     const item = {
       id: produto.id,
       nome: produto.nome,
       preco: produto.preco,
       quantidade
     };
-  
+
     setItens([...itens, item]);
     setProdutoId('');
     setQuantidade(1);
   };
-  
 
   const fecharPedido = async () => {
     if (itens.length === 0) {
@@ -48,7 +53,6 @@ function NovoPedido({ ativarAnimacao }) {
     }
 
     try {
-      console.log('Enviando pedido com os itens:', itens);
       await axios.post('http://localhost:3002/pedidos', {
         cliente: 'Consumidor',
         produtos: itens

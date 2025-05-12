@@ -4,25 +4,56 @@
     "cliente": "Consumidor",
     "produtos": [
       {
-        "id": "54025d27",
-        "nome": "Sara",
-        "preco": 123,
+        "id": "41c1212e",
+        "nome": "Monster Ultra",
+        "preco": 14,
+        "quantidade": 1
+      },
+      {
+        "id": "2334bcfb",
+        "nome": "Monster Mango Loco",
+        "preco": 14,
         "quantidade": 1
       }
     ],
-    "data": "2025-05-10T19:54:35.951Z"
+    "data": "2025-05-12T22:08:43.100Z"
   },
   {
     "id": 2,
     "cliente": "Consumidor",
     "produtos": [
       {
-        "id": "cc230e21",
-        "nome": "Ester",
-        "preco": 145,
+        "id": "98322264",
+        "nome": "Monster Ultra",
+        "preco": 14,
+        "quantidade": 1
+      },
+      {
+        "id": "d46f0160",
+        "nome": "Monster Zero",
+        "preco": 15,
         "quantidade": 1
       }
     ],
-    "data": "2025-05-10T20:08:11.028Z"
+    "data": "2025-05-12T22:22:35.934Z"
+  },
+  {
+    "id": 3,
+    "cliente": "Consumidor",
+    "produtos": [
+      {
+        "id": "98322264",
+        "nome": "Monster Ultra",
+        "preco": 14,
+        "quantidade": 1
+      },
+      {
+        "id": "d46f0160",
+        "nome": "Monster Zero",
+        "preco": 15,
+        "quantidade": 1
+      }
+    ],
+    "data": "2025-05-12T22:23:38.716Z"
   }
 ]

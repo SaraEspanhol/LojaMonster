@@ -9,8 +9,18 @@ const Produtos = () => {
 
   const carregarProdutos = () => {
     axios.get('http://localhost:3001/produtos')
-      .then(res => setProdutos(res.data))
-      .catch(err => console.error('Erro ao carregar produtos:', err));
+      .then(res => {
+        setProdutos(res.data);
+        // Salva os produtos em cache
+        localStorage.setItem('produtosCache', JSON.stringify(res.data));
+      })
+      .catch(err => {
+        console.warn('Servidor de produtos offline. Carregando do cache...');
+        const cache = localStorage.getItem('produtosCache');
+        if (cache) {
+          setProdutos(JSON.parse(cache));
+        }
+      });
   };
 
   useEffect(() => {
@@ -19,7 +29,7 @@ const Produtos = () => {
 
   const handleProdutoCadastrado = () => {
     carregarProdutos();
-    setMostrarFormulario(false); // Fecha o formulário após cadastro
+    setMostrarFormulario(false);
   };
 
   return (
@@ -53,7 +63,6 @@ const Produtos = () => {
   );
 };
 
-// Imagem padrão animada
 const getImagemProduto = (nome) => {
   return 'https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExeGxvdDR4dmtpNjRnNW96azFsdjExbmFycWkweGpqOWhweWthZmc4ayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/yqGJSngXaaa9W/giphy.gif';
 };
